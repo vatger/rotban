@@ -34,6 +34,10 @@ if (mysqli_num_rows($images_result) > 0) {
             $log.= "ERROR->cid_required, ";
         } else {
             $uri = str_replace("\$cid", urlencode($cid), $row['uri']);
+            if(intval(date("I")) == 1)
+                $uri = str_replace("\$time", "sommer", $uri);
+            if(intval(date("I")) == 0)
+                $uri = str_replace("\$time", "winter", $uri);
             $log.= "uri=${uri}, ";
         }
         break;
@@ -50,6 +54,7 @@ try {
 } catch (\Throwable $th) {
     $size = false;
 }
+
 if($size){
     $mime = $size['mime'];
     header("Content-type: " . $mime);
