@@ -20,9 +20,13 @@ if ($image['uri_preview'] == NULL or $image['uri_preview'] == "")
     $uri = $image['uri'];
 else 
     $uri = $image['uri_preview'];
-if ($image['cid_required'] != 0) 
+if ($image['cid_required'] != 0){
     $uri = str_replace("\$cid", "", $uri) ;
-
+    if(intval(date("I")) == 1)
+        $uri = str_replace("\$time", "sommer", $uri);
+    if(intval(date("I")) == 0)
+        $uri = str_replace("\$time", "winter", $uri);
+}
 $size = false;
 try {
     error_reporting(0);
