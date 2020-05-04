@@ -123,7 +123,8 @@ mysqli_close($link);
             <p class="text-sm-center">
                 Service provided by VATSIM-Germany<br>
                 Mail: events (at) vatsim-germany.org<br>
-                Developed by Paul Hollmann, Sebastian Kramer, Sebastian Klietz.
+                Developed by Paul Hollmann, Sebastian Kramer, Sebastian Klietz.<br>
+                Version: 2.1
             </p>
         </div>
     </div>
