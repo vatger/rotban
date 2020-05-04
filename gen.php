@@ -30,16 +30,17 @@ mysqli_close($link);
 if (mysqli_num_rows($images_result) > 0) {
     while ($row = mysqli_fetch_array($images_result)) {
         if ($row['cid_required'] != 0 AND $cid == "") {
-            $log.= "ERROR->cid_required, ";
             $uri = "images/error_cid.png";
+            $log.= "ERROR->cid_required, ";
         } else {
             $uri = str_replace("\$cid", urlencode($cid), $row['uri']);
+            $log.= "uri=${uri}, ";
         }
         break;
     }
 } else {
-    $log.= "ERROR->SQL_no_result, ";
     $uri = "assets/img/error_code.png";
+    $log.= "ERROR->SQL_no_result, ";
 }
 
 $size = false;
