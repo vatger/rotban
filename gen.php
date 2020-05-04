@@ -30,7 +30,7 @@ mysqli_close($link);
 if (mysqli_num_rows($images_result) > 0) {
     while ($row = mysqli_fetch_array($images_result)) {
         if ($row['cid_required'] != 0 AND $cid == "") {
-            $uri = "images/error_cid.png";
+            $uri = "assets/img/error_cid.png";
             $log.= "ERROR->cid_required, ";
         } else {
             $uri = str_replace("\$cid", urlencode($cid), $row['uri']);
