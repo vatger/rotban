@@ -1,16 +1,17 @@
 <?php
- $cid = "";
+$log = date("Y-m-d-H-i-s") . ": ";
+
+// get the 
+$cid = "";
 if(isset($_GET['cid']))
     $cid = $_GET['cid'];
+$log.= "vid=${cid}, ";
 $images = explode("_", substr($_GET['img'], 1));
-
-if ($cid == NULL)
-    $cid = "";
 
 $random = mt_rand(0, sizeof($images) - 1);
 
-$log = "Random: ${random}\n";
-file_put_contents('./images.log', $log, FILE_APPEND);
+$log.= "rand=${random}, ";
+
 
 require_once('db_conn.php');
 
@@ -29,6 +30,7 @@ mysqli_close($link);
 if (mysqli_num_rows($images_result) > 0) {
     while ($row = mysqli_fetch_array($images_result)) {
         if ($row['cid_required'] != 0 AND $cid == "") {
+            $log.= "ERROR->cid_required, ";
             $uri = "images/error_cid.png";
         } else {
             $uri = str_replace("\$cid", urlencode($cid), $row['uri']);
@@ -36,6 +38,7 @@ if (mysqli_num_rows($images_result) > 0) {
         break;
     }
 } else {
+    $log.= "ERROR->SQL_no_result, ";
     $uri = "assets/img/error_code.png";
 }
 
@@ -53,7 +56,11 @@ if($size){
 }else{
     header("Content-type: image/png");
     readfile("assets/img/error_external.png");
+    $log.= "ERROR->external_not_reachable, ";
 }
 
 mysqli_free_result($images_result);
 
+//write the log
+$log .= "\n";
+file_put_contents('./logs/gen'. date("Y-m").'.log', $log, FILE_APPEND);
