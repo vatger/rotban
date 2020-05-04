@@ -1,6 +1,7 @@
 <?php
-
-$cid = $_GET['cid'];
+ $cid = "";
+if(isset($_GET['cid']))
+    $cid = $_GET['cid'];
 $images = explode("_", substr($_GET['img'], 1));
 
 if ($cid == NULL)
@@ -35,11 +36,24 @@ if (mysqli_num_rows($images_result) > 0) {
         break;
     }
 } else {
-    $uri = "images/error_code.png";
+    $uri = "assets/img/error_code.png";
 }
 
-$mime = getimagesize($uri)['mime'];
-header("Content-type: " . $mime);
-readfile($uri);
+$size = false;
+try {
+    error_reporting(0);
+    $size = getimagesize($uri);
+} catch (\Throwable $th) {
+    $size = false;
+}
+if($size){
+    $mime = $size['mime'];
+    header("Content-type: " . $mime);
+    readfile($uri);
+}else{
+    header("Content-type: image/png");
+    readfile("assets/img/error_external.png");
+}
 
 mysqli_free_result($images_result);
+
