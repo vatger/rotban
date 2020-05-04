@@ -6,12 +6,12 @@ server with default setting (user 'root' with no password) */
 // Check connection
 require_once('db_conn.php');
 
-if ($link === false) {
+if ($link == false) {
     die("ERROR: Could not connect. " . mysqli_connect_error());
 }
 
 // Select images
-$sql = "SELECT * FROM image where active <> 0 ORDER BY id_group ASC, sort ASC";
+$sql = "SELECT * FROM `image` where active <> 0 ORDER BY id_group ASC, sort ASC";
 $images_result = mysqli_query($link, $sql);
 $images = mysqli_fetch_all($images_result, MYSQLI_ASSOC);
 
@@ -78,18 +78,7 @@ mysqli_close($link);
                             echo '<div class="col-2 d-flex align-items-center"><div class="form-check">';
                             echo '<input class="form-check-input" type="checkbox" name=' . $image['id'] . ' id="img' . $image['id'] . '" value="0"><label class="form-check-label font-weight-bold text-vatger-secondary" for="formCheck-1">' . $image['description'] . '</label>';
                             echo '</div></div>';
-
-                            if ($image['uri_preview'] == NULL or $image['uri_preview'] == "") {
-                                $uri = $image['uri'];
-                            } else {
-                                $uri = $image['uri_preview'];
-                            }
-
-                            if ($image['cid_required'] != 0) {
-                                echo '<div class="col"><img max-height="80px" max-width="400px" src="' . str_replace("\$cid", "", $uri) . '"/></div>';
-                            } else {
-                                echo '<div class="col"><img max-height="80px" max-width="400px" src="' . $uri . '"/></div>';
-                            }
+                            echo '<div class="col"><img max-height="80px" max-width="400px" src="preview.php?id=' . $image['id'] . '"/></div>';
                             echo '</div>';
                         }
                     }
