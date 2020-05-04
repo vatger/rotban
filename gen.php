@@ -50,6 +50,7 @@ try {
 } catch (\Throwable $th) {
     $size = false;
 }
+
 if($size){
     $mime = $size['mime'];
     header("Content-type: " . $mime);
