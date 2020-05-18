@@ -17,7 +17,7 @@ $images = mysqli_fetch_all($images_result, MYSQLI_ASSOC);
 
 
 // Select groups
-$sql = "SELECT * FROM `group` where exists ( select * from `image` where `id_group` = `group`.`id` ) ORDER BY sort ASC";
+$sql = "SELECT * FROM `group` where exists ( select * from `image` where `id_group` = `group`.`id` ) ORDER BY group.sort ASC";
 $groups_result = mysqli_query($link, $sql);
 $groups = mysqli_fetch_all($groups_result, MYSQLI_ASSOC);
 
@@ -70,7 +70,7 @@ mysqli_close($link);
                 <?php
                 foreach ($groups as $group) {
                     echo '<div class="container mt-5 justify-content-center" id="' . $group['id'] . '">';
-                    echo '<h3>' . $group['description'] . '</h3>';
+                    echo '<h3>' . $group['description'] . $group['sort'] .'</h3>';
                     echo '<div class="container ml-2 mt-2 justify-content-center">';
                     foreach ($images as $image) {
                         if ($image['id_group'] == $group['id']) {
