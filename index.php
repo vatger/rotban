@@ -70,7 +70,7 @@ mysqli_close($link);
                 <?php
                 foreach ($groups as $group) {
                     echo '<div class="container mt-5 justify-content-center" id="' . $group['id'] . '">';
-                    echo '<h3>' . $group['description'] . $group['sort'] .'</h3>';
+                    echo '<h3>' . $group['description'] .'</h3>';
                     echo '<div class="container ml-2 mt-2 justify-content-center">';
                     foreach ($images as $image) {
                         if ($image['id_group'] == $group['id']) {
