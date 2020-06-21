@@ -56,10 +56,11 @@ mysqli_close($link);
             <div class="col-2">
                 <div class="container pt-5 sticky">
                     <nav class="nav flex-column flex-fill border-3 rounded">
-
                         <?php
                         foreach ($groups as $group) {
-                            echo '<a class="nav-link active font-weight-bold text-vatger-secondary" href="#' . $group['id'] . '">' . $group['description'] . '</a>';
+                            ?>
+                            <a class="nav-link active font-weight-bold text-vatger-secondary" href="#<?php echo $group['id'];?>"><?php echo $group['description'];?> </a>
+                            <?php
                         }
                         ?>
                         <a class="nav-link active font-weight-bold text-success" href="#gen">Generieren</a>
@@ -69,29 +70,38 @@ mysqli_close($link);
             <div class="col">
                 <?php
                 foreach ($groups as $group) {
-                    echo '<div class="container mt-5 justify-content-center" id="' . $group['id'] . '">';
-                    echo '<h3>' . $group['description'] .'</h3>';
-                    echo '<div class="container ml-2 mt-2 justify-content-center">';
-                    foreach ($images as $image) {
-                        if ($image['id_group'] == $group['id']) {
-                            echo '<div class="row mt-2 justify-content-center">';
-                            echo '<div class="col-2 d-flex align-items-center"><div class="form-check">';
-                            echo '<input class="form-check-input" type="checkbox" name=' . $image['id'] . ' id="img' . $image['id'] . '" value="0"><label class="form-check-label font-weight-bold text-vatger-secondary" for="formCheck-1">' . $image['description'] . '</label>';
-                            echo '</div></div>';
-                            echo '<div class="col"><img max-height="80px" max-width="400px" src="preview.php?id=' . $image['id'] . '"/></div>';
-                            echo '</div>';
-                        }
-                    }
-                    echo '</div></div>';
+                    ?>
+                    <div class="container mt-5 justify-content-center" id="<?php echo $group['id'];?>">
+                        <h3><?php echo $group['description'];?></h3>
+                        <div class="container ml-2 mt-2 justify-content-center">
+                            <?php
+                            foreach ($images as $image) {
+                                if ($image['id_group'] == $group['id']) {
+                                    ?>
+                                    <div class="row mt-2 justify-content-center">
+                                        <div class="col-2 d-flex align-items-center"><div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="<?php echo $image['id'];?>" id="img<?php echo $image['id'];?>" value="0">
+                                            <label class="form-check-label font-weight-bold text-vatger-secondary" for="formCheck-1"><?php echo $image['description'];?></label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <img max-height="80px" max-width="400px" src="preview.php?id=<?php echo $image['id'];?>"/>
+                                    </div>
+                                    </div>
+                                    <?php
+                                }
+                            }
+                            ?>
+                        </div>
+                    </div>
+                    <?php
                 }
                 ?>
             </div>
         </div>
         <div class="row align-items-center justify-content-center" id="gen">
             <div class="col-3 justify-content-center align-items-center text-center mt-6">
-                <input class="form-control mt-3 text-center" type="text" id="cid" name="cid" value=""
-                       placeholder="VATSIM-ID"
-                       inputmode="numeric" minlength="6" maxlength="7">
+                <input class="form-control mt-3 text-center" type="text" id="cid" name="cid" value="" placeholder="VATSIM-ID" inputmode="numeric" minlength="6" maxlength="7">
                 <button class="btn btn-success btn-lg mt-3" type="submit">Rotbanlink generieren</button>
             </div>
         </div>
@@ -101,16 +111,15 @@ mysqli_close($link);
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title text-success">Generierung erfolgreich</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">×</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
             </div>
             <div class="modal-body text-center">
                 <p class="text-dark">Dies ist dein generierter Rotban Link.</p>
                 <input class="w-100" name="rotban_url" id="rotban_url" readonly></div>
             <div class="modal-footer">
-                <button onclick="copyToClipboard('#rotban_url')" class="btn btn-primary" type="button">In Zwischenablage
-                    kopieren
-                </button>
+                <button onclick="copyToClipboard('#rotban_url')" class="btn btn-primary" type="button">In Zwischenablage kopieren</button>
                 <button class="btn btn-light" type="button" data-dismiss="modal">Schließen</button>
             </div>
         </div>
@@ -124,7 +133,7 @@ mysqli_close($link);
                 Service provided by VATSIM-Germany<br>
                 Mail: events (at) vatsim-germany.org<br>
                 Developed by Paul Hollmann, Sebastian Kramer, Sebastian Klietz.<br>
-                Version: 2.1
+                Version: 2.2
             </p>
         </div>
     </div>

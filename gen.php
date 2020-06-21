@@ -1,19 +1,20 @@
 <?php
 $log = date("Y-m-d-H-i-s") . ": ";
 
-// get the 
+// get the
 $cid = "";
-if(isset($_GET['cid']))
+if (isset($_GET['cid'])) {
     $cid = $_GET['cid'];
-$log.= "vid=${cid}, ";
+}
+
+$log .= "vid=${cid}, ";
 $images = explode("_", substr($_GET['img'], 1));
 
 $random = mt_rand(0, sizeof($images) - 1);
 
-$log.= "rand=${random}, ";
+$log .= "rand=${random}, ";
 
-
-require_once('db_conn.php');
+require_once 'db_conn.php';
 
 if ($link === false) {
     die("ERROR: Could not connect. " . mysqli_connect_error());
@@ -29,44 +30,63 @@ mysqli_close($link);
 
 if (mysqli_num_rows($images_result) > 0) {
     while ($row = mysqli_fetch_array($images_result)) {
-        if ($row['cid_required'] != 0 AND $cid == "") {
+        if ($row['cid_required'] != 0 and $cid == "") {
             $uri = "assets/img/error_cid.png";
-            $log.= "ERROR->cid_required, ";
+            $log .= "ERROR->cid_required, ";
         } else {
             $uri = str_replace("\$cid", urlencode($cid), $row['uri']);
-            if(intval(date("I")) == 1)
+            if (intval(date("I")) == 1) {
                 $uri = str_replace("\$time", "sommer", $uri);
-            if(intval(date("I")) == 0)
+            }
+
+            if (intval(date("I")) == 0) {
                 $uri = str_replace("\$time", "winter", $uri);
-            $log.= "uri=${uri}, ";
+            }
+
+            $log .= "uri=${uri}, ";
         }
         break;
     }
 } else {
     $uri = "assets/img/error_code.png";
-    $log.= "ERROR->SQL_no_result, ";
+    $log .= "ERROR->SQL_no_result, ";
 }
 
-$size = false;
+$image = false;
 try {
     error_reporting(0);
-    $size = getimagesize($uri);
+    $image = imagecreatefromstring(file_get_contents($uri));
 } catch (\Throwable $th) {
-    $size = false;
+    $image = false;
 }
 
-if($size){
-    $mime = $size['mime'];
-    header("Content-type: " . $mime);
-    readfile($uri);
-}else{
+if ($image) {
+    // Set a maximum height and width
+    $width =  400;
+    $height = 80;
+    // Get new dimensions
+    $width_orig = imagesx($image);
+    $height_orig = imagesy($image);
+    $ratio_orig = $width_orig / $height_orig;
+    if ($width / $height > $ratio_orig) {
+        $width = $height * $ratio_orig;
+    } else {
+        $height = $width / $ratio_orig;
+    }
+    // Resample
+    $image_p = imagecreatetruecolor($width, $height);
+    imagecopyresampled($image_p, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
+    // Content type
+    header('Content-Type: image/png');
+    imagepng($image_p);
+} else {
     header("Content-type: image/png");
     readfile("assets/img/error_external.png");
-    $log.= "ERROR->external_not_reachable, ";
+    $log .= "ERROR->external_not_reachable, ";
 }
 
 mysqli_free_result($images_result);
 
 //write the log
 $log .= "\n";
-file_put_contents('./logs/gen'. date("Y-m").'.log', $log, FILE_APPEND);
+file_put_contents('./logs/gen' . date("Y-m") . '.log', $log, FILE_APPEND);
