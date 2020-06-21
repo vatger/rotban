@@ -12,19 +12,20 @@ if (!isset($_GET["id"])) {
 $imageid = mysqli_real_escape_string($link, $_GET["id"]);
 $sql = "SELECT * FROM `image` where id = $imageid and active = 1";
 $images_result = mysqli_query($link, $sql);
-$image = mysqli_fetch_assoc($images_result);
+$row = mysqli_fetch_assoc($images_result);
 
 // Close connection
 mysqli_close($link);
 
 // get the fitting url
-if ($image['uri_preview'] == null or $image['uri_preview'] == "") {
-    $uri = $image['uri'];
+$uri = false;
+if ($row['uri_preview'] == null || $row['uri_preview'] == "") {
+    $uri = $row['uri'];
 } else {
-    $uri = $image['uri_preview'];
+    $uri = $row['uri_preview'];
 }
 
-if ($image['cid_required'] != 0) {
+if ($row['cid_required'] != 0) {
     $uri = str_replace("\$cid", "945223", $uri);
     if (intval(date("I")) == 1) {
         $uri = str_replace("\$time", "sommer", $uri);
@@ -45,10 +46,9 @@ try {
     $size = false;
 }
 
-if ($image) {
+if ($size) {
     $mime = $size['mime'];
     if (strpos($mime, "gif") !== false || $row['cid_required'] != 0) {
-       
         header("Content-type: " . $mime);
         readfile($uri);
     } else {

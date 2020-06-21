@@ -27,25 +27,23 @@ $images_result = mysqli_query($link, $sql);
 
 // Close connection
 mysqli_close($link);
-
+$row = false;
 if (mysqli_num_rows($images_result) > 0) {
-    while ($row = mysqli_fetch_array($images_result)) {
-        if ($row['cid_required'] != 0 and $cid == "") {
-            $uri = "assets/img/error_cid.png";
-            $log .= "ERROR->cid_required, ";
-        } else {
-            $uri = str_replace("\$cid", urlencode($cid), $row['uri']);
-            if (intval(date("I")) == 1) {
-                $uri = str_replace("\$time", "sommer", $uri);
-            }
-
-            if (intval(date("I")) == 0) {
-                $uri = str_replace("\$time", "winter", $uri);
-            }
-
-            $log .= "uri=${uri}, ";
+    $row = mysqli_fetch_array($images_result);
+    if ($row['cid_required'] != 0 and $cid == "") {
+        $uri = "assets/img/error_cid.png";
+        $log .= "ERROR->cid_required, ";
+    } else {
+        $uri = str_replace("\$cid", urlencode($cid), $row['uri']);
+        if (intval(date("I")) == 1) {
+            $uri = str_replace("\$time", "sommer", $uri);
         }
-        break;
+
+        if (intval(date("I")) == 0) {
+            $uri = str_replace("\$time", "winter", $uri);
+        }
+
+        $log .= "uri=${uri}, ";
     }
 } else {
     $uri = "assets/img/error_code.png";
