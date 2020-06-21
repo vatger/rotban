@@ -60,7 +60,7 @@ try {
 }
 
 if ($size) {
-    if (strpos($size['mime'], "gif") !== false || $row['cid_required'] != 0) {
+    if (strpos($size['mime'], "gif") !== false) {
         $mime = $size['mime'];
         header("Content-type: " . $mime);
         readfile($uri);
@@ -70,8 +70,8 @@ if ($size) {
         $width = 400;
         $height = 80;
         // Get new dimensions
-        $width_orig = imagesx($image);
-        $height_orig = imagesy($image);
+        $width_orig = intval($size[0]);
+        $height_orig = intval($size[1]);
         $ratio_orig = $width_orig / $height_orig;
         if ($width / $height > $ratio_orig) {
             $width = $height * $ratio_orig;
@@ -80,10 +80,14 @@ if ($size) {
         }
         // Resample
         $image_p = imagecreatetruecolor($width, $height);
+        imagealphablending($image_p, false);
+        imagesavealpha($image_p, true);
+        imagealphablending($image, false);
+        imagesavealpha($image, true);
         imagecopyresampled($image_p, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
         // Content type
         header('Content-Type: image/png');
-        imagegif($image_p);
+        imagepng($image_p);
     }
 } else {
     header("Content-type: image/png");

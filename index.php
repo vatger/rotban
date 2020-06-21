@@ -85,7 +85,7 @@ mysqli_close($link);
                                         </div>
                                     </div>
                                     <div class="col">
-                                        <img max-height="80px" max-width="400px" src="preview.php?id=<?php echo $image['id'];?>"/>
+                                        <img src="preview.php?id=<?php echo $image['id'];?>"/>
                                     </div>
                                     </div>
                                     <?php
