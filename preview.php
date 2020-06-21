@@ -25,7 +25,7 @@ if ($image['uri_preview'] == null or $image['uri_preview'] == "") {
 }
 
 if ($image['cid_required'] != 0) {
-    $uri = str_replace("\$cid", "", $uri);
+    $uri = str_replace("\$cid", "945223", $uri);
     if (intval(date("I")) == 1) {
         $uri = str_replace("\$time", "sommer", $uri);
     }
@@ -35,32 +35,43 @@ if ($image['cid_required'] != 0) {
     }
 
 }
-$image = false;
+
+$size = false;
 try {
     error_reporting(0);
-    $image = imagecreatefromstring(file_get_contents($uri));
+    $size = getimagesize($uri);
+
 } catch (\Throwable $th) {
-    $image = false;
+    $size = false;
 }
+
 if ($image) {
-    // Set a maximum height and width
-    $width = 400;
-    $height = 80;
-    // Get new dimensions
-    $width_orig = imagesx($image);
-    $height_orig = imagesy($image);
-    $ratio_orig = $width_orig / $height_orig;
-    if ($width / $height > $ratio_orig) {
-        $width = $height * $ratio_orig;
+    $mime = $size['mime'];
+    if (strpos($mime, "gif") !== false || $row['cid_required'] != 0) {
+       
+        header("Content-type: " . $mime);
+        readfile($uri);
     } else {
-        $height = $width / $ratio_orig;
+        $image = imagecreatefromstring(file_get_contents($uri));
+        // Set a maximum height and width
+        $width = 400;
+        $height = 80;
+        // Get new dimensions
+        $width_orig = imagesx($image);
+        $height_orig = imagesy($image);
+        $ratio_orig = $width_orig / $height_orig;
+        if ($width / $height > $ratio_orig) {
+            $width = $height * $ratio_orig;
+        } else {
+            $height = $width / $ratio_orig;
+        }
+        // Resample
+        $image_p = imagecreatetruecolor($width, $height);
+        imagecopyresampled($image_p, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
+        // Content type
+        header('Content-Type: image/png');
+        imagegif($image_p);
     }
-    // Resample
-    $image_p = imagecreatetruecolor($width, $height);
-    imagecopyresampled($image_p, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
-    // Content type
-    header('Content-Type: image/png');
-    imagepng($image_p);
 } else {
     header("Content-type: image/png");
     readfile("assets/img/error_external.png");
