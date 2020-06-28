@@ -36,6 +36,7 @@ if (mysqli_num_rows($images_result) > 0) {
         $log .= "ERROR->cid_required, ";
     } else {
         $uri = str_replace("\$cid", urlencode($cid), $row['uri']);
+        date_default_timezone_set('Europe/Berlin');
         if (intval(date("I")) == 1) {
             $uri = str_replace("\$time", "sommer", $uri);
         }

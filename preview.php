@@ -26,6 +26,7 @@ if ($row['uri_preview'] == null || $row['uri_preview'] == "") {
 }
 
 $uri = str_replace("\$cid", "945223", $uri);
+date_default_timezone_set('Europe/Berlin');
 if (intval(date("I")) == 1) {
     $uri = str_replace("\$time", "sommer", $uri);
 }
