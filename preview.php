@@ -25,16 +25,13 @@ if ($row['uri_preview'] == null || $row['uri_preview'] == "") {
     $uri = $row['uri_preview'];
 }
 
-if ($row['cid_required'] != 0) {
-    $uri = str_replace("\$cid", "945223", $uri);
-    if (intval(date("I")) == 1) {
-        $uri = str_replace("\$time", "sommer", $uri);
-    }
+$uri = str_replace("\$cid", "945223", $uri);
+if (intval(date("I")) == 1) {
+    $uri = str_replace("\$time", "sommer", $uri);
+}
 
-    if (intval(date("I")) == 0) {
-        $uri = str_replace("\$time", "winter", $uri);
-    }
-
+if (intval(date("I")) == 0) {
+    $uri = str_replace("\$time", "winter", $uri);
 }
 
 $size = false;

@@ -28,6 +28,7 @@ $images_result = mysqli_query($link, $sql);
 // Close connection
 mysqli_close($link);
 $row = false;
+$uri = false;
 if (mysqli_num_rows($images_result) > 0) {
     $row = mysqli_fetch_array($images_result);
     if ($row['cid_required'] != 0 and $cid == "") {
