@@ -62,7 +62,7 @@ try {
 }
 
 if ($size) {
-    if (strpos($size['mime'], "gif") !== false) {
+    if (strpos($size['mime'], "gif") !== false || $row['cid_required'] != 0) {
         $mime = $size['mime'];
         header("Content-type: " . $mime);
         readfile($uri);
