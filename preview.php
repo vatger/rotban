@@ -1,6 +1,6 @@
 <?php
 require_once 'db_conn.php';
-if ($link == false) {
+if (LINK == false) {
     die("ERROR: Could not connect. " . mysqli_connect_error());
 }
 
@@ -9,13 +9,13 @@ if (!isset($_GET["id"])) {
 }
 
 // Attempt select query execution
-$imageid = mysqli_real_escape_string($link, $_GET["id"]);
+$imageid = mysqli_real_escape_string(LINK, $_GET["id"]);
 $sql = "SELECT * FROM `image` where id = $imageid and active = 1";
-$images_result = mysqli_query($link, $sql);
+$images_result = mysqli_query(LINK, $sql);
 $row = mysqli_fetch_assoc($images_result);
 
 // Close connection
-mysqli_close($link);
+mysqli_close(LINK);
 
 // get the fitting url
 $uri = false;
@@ -34,6 +34,8 @@ if (intval(date("I")) == 1) {
 if (intval(date("I")) == 0) {
     $uri = str_replace("\$time", "winter", $uri);
 }
+
+$uri = str_replace("https://rotban2.vatsim-germany.org/images", "images", $uri);
 
 $size = false;
 try {

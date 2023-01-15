@@ -16,17 +16,17 @@ $log .= "rand=${random}, ";
 
 require_once 'db_conn.php';
 
-if ($link === false) {
+if (LINK == false) {
     die("ERROR: Could not connect. " . mysqli_connect_error());
 }
 
 // Attempt select query execution
-$imageid = mysqli_real_escape_string($link, $images[$random]);
+$imageid = mysqli_real_escape_string(LINK, $images[$random]);
 $sql = "SELECT `cid_required`, `uri` FROM image where id = $imageid and active = 1";
-$images_result = mysqli_query($link, $sql);
+$images_result = mysqli_query(LINK, $sql);
 
 // Close connection
-mysqli_close($link);
+mysqli_close(LINK);
 $row = false;
 $uri = false;
 if (mysqli_num_rows($images_result) > 0) {
@@ -44,6 +44,8 @@ if (mysqli_num_rows($images_result) > 0) {
         if (intval(date("I")) == 0) {
             $uri = str_replace("\$time", "winter", $uri);
         }
+
+        $uri = str_replace(IMAGES_REPLACE_URL, "images", $uri);
 
         $log .= "uri=${uri}, ";
     }
