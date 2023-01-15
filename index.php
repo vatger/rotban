@@ -6,24 +6,24 @@ server with default setting (user 'root' with no password) */
 // Check connection
 require_once('db_conn.php');
 
-if ($link == false) {
+if (LINK == false) {
     die("ERROR: Could not connect. " . mysqli_connect_error());
 }
 
 // Select images
 $sql = "SELECT * FROM `image` where active <> 0 ORDER BY id_group ASC, sort ASC";
-$images_result = mysqli_query($link, $sql);
+$images_result = mysqli_query(LINK, $sql);
 $images = mysqli_fetch_all($images_result, MYSQLI_ASSOC);
 
 
 // Select groups
 $sql = "SELECT * FROM `group` where exists ( select * from `image` where `id_group` = `group`.`id` ) ORDER BY group.sort ASC";
-$groups_result = mysqli_query($link, $sql);
+$groups_result = mysqli_query(LINK, $sql);
 $groups = mysqli_fetch_all($groups_result, MYSQLI_ASSOC);
 
 
 // Close connection
-mysqli_close($link);
+mysqli_close(LINK);
 
 ?>
 
@@ -166,4 +166,3 @@ mysqli_close($link);
 
 </script>
 </html>
-
